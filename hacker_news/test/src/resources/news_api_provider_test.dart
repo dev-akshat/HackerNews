@@ -20,7 +20,7 @@ void main(){
       final jsonMap={'id': 123};
       return Response(json.encode(jsonMap),200);
     });
-    final item=await newsApi.fetchIten(999);
+    final item=await newsApi.fetchItem(999);
     expect(item.id,123);
   });
 }

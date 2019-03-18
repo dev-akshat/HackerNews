@@ -7,16 +7,14 @@ class Repository {
   NewsDbProvider dbProvider = NewsDbProvider();
   NewsApiProvider apiProvider = NewsApiProvider();
 
-  fetchTopIds() {
-    return apiProvider.fetchTopIds();
-  }
+  Future<List<int>> fetchTopIds() => apiProvider.fetchTopIds();
 
-  fetchItem(int id) async {
+  Future<ItemModel> fetchItem(int id) async {
     var item = await dbProvider.fetchItem(id);
     if (item != null) return item;
-    item = await apiProvider.fetchIten(id);
-    dbProvider.addItem(
-        item); //we can put await keyword to wait for item to get inserted into DataBase before returning it but its unnecessary but we dont care if it finishes successfully or not
+    item = await apiProvider.fetchItem(id);
+    dbProvider.addItem(item);
+    //we can put await keyword to wait for item to get inserted into DataBase before returning it but its unnecessary but we dont care if it finishes successfully or not
     return item;
   }
 }
