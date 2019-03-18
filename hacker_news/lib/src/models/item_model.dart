@@ -59,7 +59,7 @@ class ItemModel {
       "descendants": descendants,
       "dead": dead ? 1 : 0,
       "deleted": deleted ? 1 : 0,
-      "kids": jsonEncode(kids),
-    }
+      "kids": jsonEncode(kids)
+    };
   }
 }
