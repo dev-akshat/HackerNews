@@ -6,8 +6,12 @@ import 'dart:async';
 import '../models/item_model.dart';
 import 'repository.dart';
 
-class NewsDbProvider implements Source, Cache{
+class NewsDbProvider implements Source, Cache {
   Database db;
+
+  NewsDbProvider() {
+    init();
+  }
 
   void init() async {
     Directory documentsDirectory =
@@ -57,3 +61,5 @@ class NewsDbProvider implements Source, Cache{
     return null;
   }
 }
+
+final newsDbProvider = NewsDbProvider(); //to avoid opening multiple connections

@@ -4,17 +4,27 @@ import 'news_db_provider.dart';
 import '../models/item_model.dart';
 
 class Repository {
-  NewsDbProvider dbProvider = NewsDbProvider();
-  NewsApiProvider apiProvider = NewsApiProvider();
+  List<Source> sources = <Source>[
+    newsDbProvider, //reference of variable from NewsDbProvider
+    NewsApiProvider(),
+  ];
 
-  Future<List<int>> fetchTopIds() => apiProvider.fetchTopIds();
+  List<Cache> caches = <Cache>[
+    newsDbProvider, //reference of variable from NewsDbProvider
+  ];
+
+  Future<List<int>> fetchTopIds() {
+    return sources[1].fetchTopIds();
+  }
 
   Future<ItemModel> fetchItem(int id) async {
-    var item = await dbProvider.fetchItem(id);
-    if (item != null) return item;
-    item = await apiProvider.fetchItem(id);
-    dbProvider.addItem(item);
-    //we can put await keyword to wait for item to get inserted into DataBase before returning it but its unnecessary but we dont care if it finishes successfully or not
+    ItemModel item;
+    Source source;
+    for (source in sources) {
+      item = await source.fetchItem(id);
+      if (item != null) break;
+    }
+    for (var cache in caches) cache.addItem(item);
     return item;
   }
 }
@@ -25,6 +35,6 @@ abstract class Source {
   Future<ItemModel> fetchItem(int id);
 }
 
-abstract class Cache{
+abstract class Cache {
   Future<int> addItem(ItemModel item);
 }
